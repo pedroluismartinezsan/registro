@@ -61,6 +61,24 @@ button.primary{background-size:200% 200%;animation:buttonFlow 5s ease-in-out inf
 @keyframes buttonFlow{to{background-position:100% 100%;box-shadow:0 0 26px rgba(0,185,255,.35)}}
 @media(max-width:700px){.ambient-orb{filter:blur(50px);opacity:.36}.ambient-beam{opacity:.35}.ambient-stars{opacity:.2}}
 @media(prefers-reduced-motion:reduce){.ambient-stage *,body::before,body::after,.hero-eyebrow,.hero-title,.hero-title span,button.primary{animation:none!important}}
+
+/* Modo optimizado: movimiento suave con menos trabajo de GPU */
+body{background-attachment:scroll}
+body::before,body::after{animation:none!important;transform:none!important}
+body::before{inset:0;opacity:.3}
+body::after{opacity:.2}
+.ambient-stage{z-index:-1;contain:layout paint}
+.ambient-orb{width:44vmax;height:44vmax;filter:blur(30px);opacity:.28;mix-blend-mode:normal;will-change:transform}
+.orb-a{left:-18vmax;top:-15vmax;animation:orbitA 24s ease-in-out infinite alternate}
+.orb-b{right:-20vmax;top:20%;animation:orbitB 28s ease-in-out infinite alternate}
+.orb-c,.ambient-beam,.ambient-stars{display:none!important}
+header,.panel,.notice{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.panel{background:rgba(5,20,43,.91)}
+header{background:rgba(3,15,34,.94)}
+.hero-eyebrow,header img,button.primary{animation:none!important}
+.hero-title span{animation:gradientFlow 12s linear infinite}
+.panel:hover{box-shadow:0 15px 35px rgba(0,0,0,.34)}
+@media(max-width:700px){.ambient-orb{width:55vmax;height:55vmax;filter:blur(18px);opacity:.2}.orb-b{display:none!important}.panel{background:rgba(5,20,43,.95)}}
 </style></head><body><div class="ambient-stage" aria-hidden="true"><i class="ambient-orb orb-a"></i><i class="ambient-orb orb-b"></i><i class="ambient-orb orb-c"></i><i class="ambient-beam beam-a"></i><i class="ambient-beam beam-b"></i><i class="ambient-stars"></i></div><header><img src="./icons/icon-192.png" alt="PL"><div><h1>REGISTRO CIUDADANO</h1><small>Equipo Pedro León · Plataforma digital</small></div></header><main><div id="notice" class="notice" role="status"></div>
 <section id="public" class="panel"><div class="hero-intro"><span class="hero-eyebrow">✦ SISTEMA DIGITAL</span><h2 class="hero-title">Tu registro, <span>más sencillo.</span></h2><p class="hero-description">Completa tus datos personales y electorales de forma manual.</p></div><h2>Registrar ciudadano</h2><p class="sub">Completa los datos solicitados. Todos los campos son obligatorios.</p><form id="register"><div class="fields" id="registerFields"></div><label style="display:flex;gap:9px;align-items:flex-start;margin-top:20px"><input type="checkbox" id="accept" style="width:auto;margin-top:4px" required>Autorizo el tratamiento de mis datos personales conforme al aviso de privacidad del responsable.</label><p class="muted">Antes de usar esta plataforma, el responsable debe publicar su aviso de privacidad con identidad, finalidades, derechos y contacto. No es un servicio oficial de la Registraduría.</p><div class="actions"><button class="primary" type="submit">Guardar registro</button><a class="btn" href="https://consultacenso.registraduria.gov.co/" target="_blank" rel="noopener noreferrer">Consultar puesto de votación</a></div></form></section>
 <section id="admin" class="panel hide"><h2>Panel del administrador</h2><div id="loginArea"><label for="password">Contraseña administrativa</label><input type="password" id="password" autocomplete="current-password" placeholder="Ingresa tu contraseña"><div class="actions"><button id="login" class="primary">Ingresar</button></div></div><div id="adminArea" class="hide"><div class="actions"><button id="refresh">Actualizar registros</button><button id="logout">Cerrar sesión</button></div><input id="search" placeholder="Buscar por nombre, cédula, municipio o comuna" aria-label="Buscar registros" style="margin-top:15px"><div class="tablewrap"><table><thead><tr><th>Nombre</th><th>NUIP</th><th>WhatsApp</th><th>Municipio</th><th>Comuna</th><th>Puesto</th><th>Acciones</th></tr></thead><tbody id="rows"></tbody></table></div><form id="adminForm" class="hide"><h2>Editar ciudadano</h2><p id="editing"></p><div class="fields" id="editFields"></div><div class="actions"><button type="submit" class="primary">Guardar cambios</button><button type="button" id="cancelEdit">Cancelar</button></div></form><div id="confirm" class="hide"><strong>¿Eliminar definitivamente este registro?</strong><p id="deleting"></p><div class="actions"><button id="confirmDelete" class="danger">Sí, eliminar</button><button id="cancelDelete">Cancelar</button></div></div></div></section></main><footer>Registro Ciudadano · Requiere conexión a internet <div class="footer-admin"><button type="button" id="tabAdmin">Administrador</button></div></footer><script>
